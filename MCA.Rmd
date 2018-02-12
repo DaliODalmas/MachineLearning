@@ -1,0 +1,83 @@
+---
+title: "MCA"
+author: "Dalmas Otieno"
+date: "February 12, 2018"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(FactoMineR)
+library(ggplot2)
+data(tea)
+View(tea)
+```
+
+```{r}
+newtea=tea[,c("Tea","How","how","sugar","where","always")]
+head(newtea)
+```
+
+
+```{r}
+g<-function(x){
+  nlevels(as.factor(x))
+}
+cuts<-apply(newtea,2,g)
+#cuts function(x) nlevels(as.factor(x))
+cuts
+```
+
+
+##mca
+```{r}
+mca1<-MCA(newtea,graph = FALSE)
+mca1
+```
+
+
+
+```{r}
+# data frame with variable coordinates
+mca1_vars_df = data.frame(mca1$var$coord, Variable = rep(names(cuts), cuts))
+#rep(names(cuts), cuts)
+#View(mca1_vars_df)
+# data frame with observation coordinates
+mca1_obs_df = data.frame(mca1$ind$coord)
+#View(mca1_obs_df)
+# plot of variable categories
+ggplot(data=mca1_vars_df, 
+       aes(x = Dim.1, y = Dim.2, label = rownames(mca1_vars_df))) +
+ geom_hline(yintercept = 0, colour = "gray70") +
+ geom_vline(xintercept = 0, colour = "gray70") +
+ geom_text(aes(colour=Variable)) +
+ ggtitle("MCA plot of variables using R package FactoMineR")
+```
+
+```{r}
+# MCA plot of observations and categories
+ggplot(data = mca1_obs_df, aes(x = Dim.1, y = Dim.2)) +
+  geom_hline(yintercept = 0, colour = "gray70") +
+  geom_vline(xintercept = 0, colour = "gray70") +
+  geom_point(colour = "gray50", alpha = 0.7) +
+  geom_density2d(colour = "gray80") +
+  geom_text(data = mca1_vars_df, 
+            aes(x = Dim.1, y = Dim.2, 
+                label = rownames(mca1_vars_df), colour = Variable)) +
+  ggtitle("MCA plot of variables using R package FactoMineR") +
+  scale_colour_discrete(name = "Variable")
+
+```
+
+
+
+
+
+
+
+
+
+
+
