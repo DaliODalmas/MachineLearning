@@ -42,12 +42,6 @@ mca1
 ```{r}
 # data frame with variable coordinates
 mca1_vars_df = data.frame(mca1$var$coord, Variable = rep(names(cuts), cuts))
-#rep(names(cuts), cuts)
-#View(mca1_vars_df)
-# data frame with observation coordinates
-mca1_obs_df = data.frame(mca1$ind$coord)
-#View(mca1_obs_df)
-# plot of variable categories
 ggplot(data=mca1_vars_df, 
        aes(x = Dim.1, y = Dim.2, label = rownames(mca1_vars_df))) +
  geom_hline(yintercept = 0, colour = "gray70") +
@@ -68,7 +62,6 @@ ggplot(data = mca1_obs_df, aes(x = Dim.1, y = Dim.2)) +
                 label = rownames(mca1_vars_df), colour = Variable)) +
   ggtitle("MCA plot of variables using R package FactoMineR") +
   scale_colour_discrete(name = "Variable")
-
 ```
 
 
